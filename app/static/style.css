@@ -1,0 +1,81 @@
+:root {
+	--color-dark-transparent: #240128b9;
+	--color-dark: #240128;
+	--color-light: #fdebff;
+	--color-main: #45014c;
+	--color-alt: #dab04e;
+
+	--color-bg-gradient-top: #2b0130;
+	--color-bg-gradient-bottom: #3c0142;
+
+	--text-h1: 5.61rem;
+	--text-h2: 4.209rem;
+	--text-h3: 3.157rem;
+	--text-h4: 2.369rem;
+	--text-h5: 1.777rem;
+	--text-h6: 1.333rem;
+
+	--text-small: 0.75rem;
+
+	--shadow-small: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+	--shadow-medium: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+	--shadow-large: 0 60px 80px rgba(0, 0, 0, 0.6), 0 45px 26px rgba(0, 0, 0, 0.14);
+
+	--shadow-text: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+
+	--font-heading: 'Lovers Quarrel', cursive;
+	--font-body: 'Lusitana', serif;
+
+	--pad-side: 15vw;
+	--br: 0.5rem;
+}
+
+html {
+}
+
+body {
+	background: linear-gradient(var(--color-bg-gradient-top), var(--color-bg-gradient-bottom));
+	font-family: var(--font-body);
+	color: var(--color-light);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	text-shadow: var(--shadow-text);
+	color: var(--color-alt);
+	font-family: var(--font-heading);
+}
+
+h1 {
+	font-size: var(--text-h1);
+}
+h2 {
+	font-size: var(--text-h2);
+}
+h3 {
+	font-size: var(--text-h3);
+}
+h4 {
+	font-size: var(--text-h4);
+}
+h5 {
+	font-size: var(--text-h5);
+}
+h6 {
+	font-size: var(--text-h6);
+}
+
+button {
+	font-family: var(--font-body);
+	background-color: var(--color-dark);
+	box-shadow: var(--shadow-medium);
+	color: var(--color-alt);
+	outline: none;
+	border: none;
+	border-radius: var(--br);
+	padding: 1em 2em;
+}

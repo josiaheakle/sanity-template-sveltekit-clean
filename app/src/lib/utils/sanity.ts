@@ -1,9 +1,8 @@
-import type { PortableTextBlock } from '@portabletext/types';
 import { createClient } from '@sanity/client';
-import type { ImageAsset, Slug } from '@sanity/types';
 import groq from 'groq';
 
 import { PUBLIC_SANITY_DATASET, PUBLIC_SANITY_PROJECT_ID } from '$env/static/public';
+import type { DataType, SanityData, SiteSettings } from './sanity.types';
 
 if (!PUBLIC_SANITY_PROJECT_ID || !PUBLIC_SANITY_DATASET) {
 	throw new Error('Did you forget to run sanity init --env?');
@@ -16,24 +15,75 @@ export const client = createClient({
 	apiVersion: '2023-03-20' // date of setup
 });
 
-export async function getPosts(): Promise<Post[]> {
-	return await client.fetch(
-		groq`*[_type == "post" && defined(slug.current)] | order(_createdAt desc)`
-	);
+/**
+ * Gets an array of the requested Sanity data type
+ * ! Update SanityData type in ./sanity.types.ts to ensure the types are up to date
+ * @param dataType The name of the Sanity data type
+ */
+export async function getDataEntry<T extends DataType>(
+	dataType: T
+): Promise<
+	Array<
+		SanityData & {
+			_type: T;
+		}
+	>
+>;
+
+/**
+ * Gets a single entry of the requested Sanity data type
+ * ! Update SanityData type in ./sanity.types.ts to ensure the types are up to date
+ * @param dataType The name of the Sanity data type
+ * @param slug The slug of the entry
+ */
+export async function getDataEntry<T extends DataType>(
+	dataType: T,
+	slug: string
+): Promise<
+	SanityData & {
+		_type: T;
+	}
+>;
+
+/**
+ * Gets an array or single entry of the requested Sanity data type
+ * ! Update SanityData type in ./sanity.types.ts to ensure the types are up to date
+ * @param dataType The name of the Sanity data type
+ * @param slug [OPTIONAL] The slug of the entry
+ */
+export async function getDataEntry<T extends DataType>(
+	dataType: T,
+	slug?: string
+): Promise<
+	| Array<
+			SanityData & {
+				_type: T;
+			}
+	  >
+	| (SanityData & {
+			_type: T;
+	  })
+> {
+	if (slug) {
+		return (await client.fetch(groq`*[_type == "${dataType}" && slug.current == $slug][0]`, {
+			slug
+		})) as Array<
+			SanityData & {
+				_type: T;
+			}
+		>;
+	}
+
+	return (await client.fetch(
+		groq`*[_type == "${dataType}" && defined(slug.current)] | order(_createdAt desc)`
+	)) as SanityData & {
+		_type: T;
+	};
 }
 
-export async function getPost(slug: string): Promise<Post> {
-	return await client.fetch(groq`*[_type == "post" && slug.current == $slug][0]`, {
-		slug
-	});
-}
-
-export interface Post {
-	_type: 'post';
-	_createdAt: string;
-	title?: string;
-	slug: Slug;
-	excerpt?: string;
-	mainImage?: ImageAsset;
-	body: PortableTextBlock[];
+/**
+ * Gets the site settings
+ */
+export async function getSiteData(): Promise<SiteSettings> {
+	return await client.fetch(groq`*[_type == "siteSettings"][0]`);
 }

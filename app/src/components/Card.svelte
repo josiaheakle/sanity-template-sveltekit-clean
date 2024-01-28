@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { formatDate } from '$lib/utils';
 	import { urlFor } from '$lib/utils/image';
-	import type { Post } from '$lib/utils/sanity';
+	import type { Post } from '$lib/utils/sanity.types';
 
 	export let post: Post;
 </script>
@@ -19,7 +19,7 @@
 
 	<div class="card__container">
 		<h3 class="card__title">
-			<a class="card__link" href={`/post/${post.slug.current}`}>
+			<a class="card__link" href={`/blog/${post.slug.current}`}>
 				{post.title}
 			</a>
 		</h3>
